@@ -1,18 +1,22 @@
 package org.example;
 
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import us.codecraft.xsoup.Xsoup;
 
 
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.io.FileWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class Main {
     static String xpathSEP = "//*[@id=\"bibliography\"]/ul/li";
@@ -23,40 +27,32 @@ public class Main {
         String urlSEP = "https://plato.stanford.edu/entries/introspection/";
         String urlDDJ = "https://terebess.hu/english/tao/addiss.html";
 
-        Document finalDocument = Main.getDocumentFromHTML(urlSEP);
-        Elements elements = Main.getElements(finalDocument, xpathSEP);
-        Main.writeFile("texts.txt", elements);
+        Document finalDocument = Main.getDocumentFromURL(urlSEP);
+        Elements elements = Main.getElements(finalDocument, "ul.hanging:has(li)");
+
+        //Main.writeFile("texts.txt", elements);
+
+        Main.writeCSV("texts.csv", elements);
+
+
 
 
 
 
     }
 
-public static Document getDocumentFromHTML (String url) throws IOException {
+public static Document getDocumentFromURL(String url) throws IOException {
+
+    //Testing Connection
+    URL obj = new URL(url);
+    HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+    int responseCode = con.getResponseCode();
+    System.out.println("Response code: " + responseCode);
 
 
-//    URL obj = new URL(url);
-//    //Setting and Testing Connection
-//    HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-//    // optional request header
-//    //con.setRequestProperty("User-Agent", "Mozilla/5.0");
-//    int responseCode = con.getResponseCode();
-//    System.out.println("Response code: " + responseCode);
-//
-//
-//    //Optional HTML to String
-//    String inputLine;
-//    StringBuilder response = new StringBuilder();
-//    BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-//
-//    while ((inputLine = in.readLine()) != null) {
-//        response.append(inputLine);
-//    }
-//    in.close();
-//    String html = response.toString();
-
+    //Retrieving page
     Document doc = Jsoup.connect(url).get();
-    System.out.println(doc);
+    //System.out.println(doc);
     return doc;
 }
 
@@ -64,9 +60,19 @@ public static Document getDocumentFromHTML (String url) throws IOException {
 
 
 public static Elements getElements (Document doc, String searchAttribute) {
+
+
     //Elements texts = doc.getElementsByTag(searchAttribute);
 
-    Elements texts = doc.selectXpath(searchAttribute);
+
+
+
+    //Elements texts = doc.selectXpath(searchAttribute);
+
+
+
+    Elements texts = doc.select(searchAttribute);
+
     return texts;
 }
 
@@ -87,15 +93,28 @@ public static void writeFile (String fileName, Elements elements) throws IOExcep
     }
         myWriter.write(String.valueOf(results));
         myWriter.close();
+}
 
 
 
-//CSV Output
-//                  Writer writer = Files.newBufferedWriter(Paths.get("authors.csv"));
-//                  CSVPrinter printer = new CSVPrinter(writer, CSVFormat.DEFAULT);
-//                  printer.printRecord(authors);
-//                  printer.println();
+public static void writeCSV (String fileName, Elements elements) throws IOException {
+    Writer writer = Files.newBufferedWriter(Paths.get(fileName));
+    CSVPrinter printer = new CSVPrinter(writer, CSVFormat.DEFAULT);
+    for (Element e : elements){
+
+        String text = e.toString();
+        //results.add(text);
+
+        printer.printRecord(text);
+        //printer.println();
+        System.out.println(text);
 
     }
+}
+
+
+
+
+
 
 }
