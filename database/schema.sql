@@ -14,11 +14,12 @@ page_id serial,
 page_name varchar(50) NOT NULL,
 --author varchar(50) NOT NULL,                    --future improvements
 --publish_year integer NOT NULL,                  
-CONSTRAINT pk_sep_page_id PRIMARY KEY (page_id)
+CONSTRAINT pk_sep_page_page_id PRIMARY KEY (page_id)
 );
 
 CREATE TABLE page_text (
 page_id integer NOT NULL,
+page_name text NOT NULL,
 page_text text NOT NULL,
 page_text_tokens TSVECTOR,
 CONSTRAINT fk_page_text_page_id FOREIGN KEY (page_id) REFERENCES sep_page (page_id)
