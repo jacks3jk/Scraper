@@ -1,15 +1,13 @@
 package org.example.controller;
 
-import com.example.daodejing.dao.ChapterTextDAO;
-import com.example.daodejing.model.ChapterText;
-import com.example.daodejing.model.Quote;
+
 import org.example.dao.SepPageDAO;
 import org.example.model.SepPage;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.*;
 
+
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -27,6 +25,13 @@ public class SepPageController {
     @GetMapping("/sepPage")
     public List<SepPage> fetchBibliographyByPageName(@RequestParam String pageName) {
     return sepPageDAO.returnBibliography(pageName);
+    }
+
+    @GetMapping("/test")
+    public List<SepPage> testSepPageMethod () {
+        List<SepPage> sepPage = new ArrayList<>();
+        sepPage.add(new SepPage(2, "Test", "Test", "Test", "Test"));
+        return sepPage;
     }
 }
 

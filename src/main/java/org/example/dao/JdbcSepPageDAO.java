@@ -10,6 +10,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
+import org.springframework.stereotype.Component;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -23,6 +24,8 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+
+@Component
 public class JdbcSepPageDAO implements SepPageDAO {
 
     private static JdbcTemplate jdbcTemplate;

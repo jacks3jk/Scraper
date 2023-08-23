@@ -52,4 +52,18 @@ public class SepPage {
     public void setSepPageYear(String sepPageYear) {
         this.sepPageYear = sepPageYear;
     }
+
+
+    public SepPage(){
+
+    }
+
+    public SepPage (int sepPageID, String sepPageName, String sepPageAuthor, String sepPageBibliography, String sepPageYear) {
+        super ();
+        this.sepPageID = sepPageID;
+        this.sepPageName = sepPageName;
+        this.sepPageAuthor = sepPageAuthor;
+        this.sepPageBibliography = sepPageBibliography;
+        this.sepPageYear = sepPageYear;
+    }
 }
