@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,20 +21,50 @@ public class SepPageController {
         this.sepPageDAO = sepPageDAO;
     }
 
+    @GetMapping("/all")
+    public List<String> fetchAllBibliography() throws IOException {
 
+        ////POST call -- http://localhost:3000/sepPage?page=introspection
+
+        return sepPageDAO.returnAllBibliographies();
+    }
 
     @GetMapping("/sepPage")
-    public List<SepPage> fetchBibliographyByPageName(@RequestParam String pageName) {
+    public List<String> fetchBibliographyByPageName(@RequestParam("page") String pageName) throws IOException {
+
+    ////POST call -- http://localhost:3000/sepPage?page=introspection
+
     return sepPageDAO.returnBibliography(pageName);
     }
 
     @GetMapping("/test")
-    public List<SepPage> testSepPageMethod () {
+    public List<SepPage> testSepPageMethod (@RequestParam("id") int id) {
+
+        //POST call -- http://localhost:3000/test?id=1
+        //POST call -- http://localhost:3000/test?id=2
+
         List<SepPage> sepPage = new ArrayList<>();
-        sepPage.add(new SepPage(2, "Test", "Test", "Test", "Test"));
-        return sepPage;
+
+        if (id == 1) {
+            sepPage.add(new SepPage(1, "Test", "Test", "Test", "Test"));
+        }
+        else if (id == 2) {
+            sepPage.add(new SepPage(2, "Test2", "Test2", "Test2", "Test2"));
+            }
+            return sepPage;
+        }
+
+
+    @GetMapping("/author")
+    public int getAuthorCount (@RequestParam("author") String authorName) throws IOException {
+
+        //POST call -- http://localhost:3000/author?author=Alston
+
+        return sepPageDAO.checkAuthorCount(authorName, "introspection");
     }
-}
+
+
+    }
 
 //    @GetMapping("/translations")
 //    public List<ChapterText> fetchTranslationsByChapter(@RequestParam int chapterNumber) {

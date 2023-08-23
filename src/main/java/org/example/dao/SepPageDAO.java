@@ -10,7 +10,7 @@ public interface SepPageDAO {
 
 
     //This should simply return the entire bibliography, formatted, when user searches for a page
-    List<SepPage> returnBibliography (String sepPageName);
+    List<String> returnBibliography (String sepPageName) throws IOException;
 
 
 
@@ -26,6 +26,11 @@ public interface SepPageDAO {
     List<SepPage> returnAllPagesMentions (String sepPageBibliography);
 
     void setBibliography (String sepPageName, Elements ele) throws IOException;
+
+    int checkAuthorCount (String authorName, String sepPage) throws IOException;
+
+
+    List <String> returnAllBibliographies () throws IOException;
 
 
 

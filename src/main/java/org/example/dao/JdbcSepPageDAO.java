@@ -37,30 +37,50 @@ public class JdbcSepPageDAO implements SepPageDAO {
 
 
     @Override
-    public List<SepPage> returnBibliography(String sepPageName) {
-        List<SepPage> result = new ArrayList<>();
-        SqlRowSet rowSet = jdbcTemplate.queryForRowSet(
-//                "SELECT ct.chapter, ct.chapter_text, t.author, t.text_id, t.publish_year  " +
-//                "FROM chapter_text AS ct " +
-//                "JOIN translation AS t ON ct.text_id = t.text_id " +
-//                "WHERE ct.chapter = ?;"
-                   "SELECT pt.page_id, pt.page_text" +
-                   "FROM page_text AS pt" +
-                   "WHERE pt.page_name = ?;"
-                , sepPageName);
-        while (rowSet.next()) {
-            SepPage sep = new SepPage();
-            sep.setSepPageID(rowSet.getInt("page_id"));
-            //sep.setSepPageName(rowSet.getInt("page_"));
-            sep.setSepPageBibliography(rowSet.getString("page_text"));
-            //sep.setSepPageAuthor(rowSet.getInt("text_id"));
-            //sep.setSepPageYear(rowSet.getInt("publish_year"));
-            result.add(sep);
+    public List<String> returnBibliography(String sepPageName) throws IOException {
+        List<String> result = new ArrayList<>();
+        String xpathSEP = "//*[@id=\"bibliography\"]/ul/li";
+        String urlSEP = "https://plato.stanford.edu/entries/" + sepPageName + "/";
+        //String urlDDJ = "https://terebess.hu/english/tao/addiss.html";
+
+        Document finalDocument = JdbcSepPageDAO.getDocumentFromURL(urlSEP);
+        Elements elements = JdbcSepPageDAO.getElements(finalDocument, xpathSEP);
+
+        for (Element e : elements) {
+
+            String text = e.text();
+
+            result.add(text);
+
+
         }
+
+
+//        SqlRowSet rowSet = jdbcTemplate.queryForRowSet(
+////                "SELECT ct.chapter, ct.chapter_text, t.author, t.text_id, t.publish_year  " +
+////                "FROM chapter_text AS ct " +
+////                "JOIN translation AS t ON ct.text_id = t.text_id " +
+////                "WHERE ct.chapter = ?;"
+//                   "SELECT pt.page_id, pt.page_text" +
+//                   "FROM page_text AS pt" +
+//                   "WHERE pt.page_name = ?;"
+//                , sepPageName);
+//        while (rowSet.next()) {
+//            SepPage sep = new SepPage();
+//            sep.setSepPageID(rowSet.getInt("page_id"));
+//            //sep.setSepPageName(rowSet.getInt("page_"));
+//            sep.setSepPageBibliography(rowSet.getString("page_text"));
+//            //sep.setSepPageAuthor(rowSet.getInt("text_id"));
+//            //sep.setSepPageYear(rowSet.getInt("publish_year"));
+//            result.add(sep);
+//        }
+
         return result;
 
 
     }
+
+
 
     @Override
     public List<SepPage> returnInfo(String sepPageName) {
@@ -92,6 +112,82 @@ public class JdbcSepPageDAO implements SepPageDAO {
         //JdbcSepPageDAO.writeCSV("texts.csv", elements);
 
 
+    }
+
+    @Override
+    public int checkAuthorCount(String authorName, String sepPage) throws IOException {
+        int result = 0;
+        String xpathSEP = "//*[@id=\"bibliography\"]/ul/li";
+        String urlSEP = "https://plato.stanford.edu/entries/" + sepPage + "/";
+        //String urlDDJ = "https://terebess.hu/english/tao/addiss.html";
+
+        Document finalDocument = JdbcSepPageDAO.getDocumentFromURL(urlSEP);
+        Elements elements = JdbcSepPageDAO.getElements(finalDocument, xpathSEP);
+
+        for (Element e : elements) {
+
+            String text = e.text();
+
+            if (text.contains(authorName)) {
+                result++;
+            } else if (!text.contains(authorName)) {
+                System.out.println("Error!");
+            }
+
+
+        }
+
+
+//        SqlRowSet rowSet = jdbcTemplate.queryForRowSet(
+////                "SELECT ct.chapter, ct.chapter_text, t.author, t.text_id, t.publish_year  " +
+////                "FROM chapter_text AS ct " +
+////                "JOIN translation AS t ON ct.text_id = t.text_id " +
+////                "WHERE ct.chapter = ?;"
+//                   "SELECT pt.page_id, pt.page_text" +
+//                   "FROM page_text AS pt" +
+//                   "WHERE pt.page_name = ?;"
+//                , sepPageName);
+//        while (rowSet.next()) {
+//            SepPage sep = new SepPage();
+//            sep.setSepPageID(rowSet.getInt("page_id"));
+//            //sep.setSepPageName(rowSet.getInt("page_"));
+//            sep.setSepPageBibliography(rowSet.getString("page_text"));
+//            //sep.setSepPageAuthor(rowSet.getInt("text_id"));
+//            //sep.setSepPageYear(rowSet.getInt("publish_year"));
+//            result.add(sep);
+//        }
+
+        return result;
+    }
+
+    @Override
+    public List<String> returnAllBibliographies() throws IOException {
+
+        String urlSEP = "https://plato.stanford.edu/contents.html";
+        String xpathSEP = "//a[starts-with(@href, 'entries')]";
+
+        List<String> result = new ArrayList<>();
+
+
+        Document finalDocument = JdbcSepPageDAO.getDocumentFromURL(urlSEP);
+        //Elements elements = JdbcSepPageDAO.getElements(finalDocument, xpathSEP);
+
+        Elements elements = finalDocument.select("a[href^=\"entries\"]");
+
+
+        for (Element e : elements) {
+
+            result.add(e.attr("abs:href"));
+
+
+//            String text = e.text();
+//            result.add(text);
+
+
+
+
+        }
+    return result;
     }
 
 
