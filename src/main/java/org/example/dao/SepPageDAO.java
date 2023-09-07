@@ -1,6 +1,7 @@
 package org.example.dao;
 
 import org.example.model.SepPage;
+import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
@@ -13,6 +14,7 @@ public interface SepPageDAO {
     List<String> returnBibliography (String sepPageName) throws IOException;
 
 
+    List<String> returnBibliography(Document doc) throws IOException;
 
     //Should return author and year
     List<SepPage> returnInfo (String sepPageName);
@@ -30,12 +32,12 @@ public interface SepPageDAO {
     int checkAuthorCount (String authorName, String sepPage) throws IOException;
 
 
-    List <String> returnAllBibliographies () throws IOException;
+    List <String> returnAllURLS() throws IOException;
 
 
+    List<String> returnAllTitles() throws IOException;
 
+    String returnSingleTitle(Document doc) throws IOException;
 
-
-
-
+    SepPage returnFullSEPPage(int sepPageIndex) throws IOException;
 }

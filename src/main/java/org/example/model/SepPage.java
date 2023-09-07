@@ -1,12 +1,14 @@
 package org.example.model;
 
+import java.util.List;
+
 public class SepPage {
 
     private int sepPageID;
 
     private String sepPageName;
 
-    private String sepPageBibliography;
+    private List<String> sepPageBibliography;
 
     private String sepPageAuthor;
 
@@ -29,11 +31,11 @@ public class SepPage {
         this.sepPageName = sepPageName;
     }
 
-    public String getSepPageBibliography () {
+    public List <String>getSepPageBibliography () {
         return sepPageBibliography;
     }
 
-    public void setSepPageBibliography(String sepPageBibliography) {
+    public void setSepPageBibliography(List<String> sepPageBibliography) {
         this.sepPageBibliography = sepPageBibliography;
     }
 
@@ -58,12 +60,20 @@ public class SepPage {
 
     }
 
-    public SepPage (int sepPageID, String sepPageName, String sepPageAuthor, String sepPageBibliography, String sepPageYear) {
+    public SepPage (int sepPageID, String sepPageName, String sepPageAuthor, List<String> sepPageBibliography, String sepPageYear) {
         super ();
         this.sepPageID = sepPageID;
         this.sepPageName = sepPageName;
         this.sepPageAuthor = sepPageAuthor;
         this.sepPageBibliography = sepPageBibliography;
         this.sepPageYear = sepPageYear;
+    }
+
+    public SepPage (int sepPageID, String sepPageName, List<String> sepPageBibliography) {
+        super();
+        this.sepPageID = sepPageID;
+        this.sepPageName = sepPageName;
+        this.sepPageBibliography = sepPageBibliography;
+
     }
 }

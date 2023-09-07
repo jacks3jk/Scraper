@@ -3,7 +3,6 @@ package org.example.controller;
 
 import org.example.dao.SepPageDAO;
 import org.example.model.SepPage;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -21,12 +20,33 @@ public class SepPageController {
         this.sepPageDAO = sepPageDAO;
     }
 
+
+
+
+    @GetMapping("/fullpage")
+    public SepPage fetchWholePage(@RequestParam("id") int id) throws IOException {
+
+        //GET call -- http://localhost:3000/fullpage?id=1
+
+        return sepPageDAO.returnFullSEPPage(id);
+    }
+    @GetMapping("/alltitles")
+    public List<String> fetchAllTitles() throws IOException {
+        System.out.println(sepPageDAO.returnAllTitles().toString());
+
+        return sepPageDAO.returnAllTitles();
+    }
+
     @GetMapping("/all")
     public List<String> fetchAllBibliography() throws IOException {
 
-        ////POST call -- http://localhost:3000/sepPage?page=introspection
+        ////GET call -- http://localhost:3000/sepPage?page=introspection
 
-        return sepPageDAO.returnAllBibliographies();
+        System.out.println(sepPageDAO.returnAllURLS().toString());
+
+        //System.out.println(sepPageDAO.returnAllURLS().get(1));
+        return sepPageDAO.returnAllURLS();
+
     }
 
     @GetMapping("/sepPage")
@@ -37,22 +57,22 @@ public class SepPageController {
     return sepPageDAO.returnBibliography(pageName);
     }
 
-    @GetMapping("/test")
-    public List<SepPage> testSepPageMethod (@RequestParam("id") int id) {
-
-        //POST call -- http://localhost:3000/test?id=1
-        //POST call -- http://localhost:3000/test?id=2
-
-        List<SepPage> sepPage = new ArrayList<>();
-
-        if (id == 1) {
-            sepPage.add(new SepPage(1, "Test", "Test", "Test", "Test"));
-        }
-        else if (id == 2) {
-            sepPage.add(new SepPage(2, "Test2", "Test2", "Test2", "Test2"));
-            }
-            return sepPage;
-        }
+//    @GetMapping("/test")
+//    public List<SepPage> testSepPageMethod (@RequestParam("id") int id) {
+//
+//        //POST call -- http://localhost:3000/test?id=1
+//        //POST call -- http://localhost:3000/test?id=2
+//
+//        List<SepPage> sepPage = new ArrayList<>();
+//
+//        if (id == 1) {
+//            sepPage.add(new SepPage(1, "Test", "Test", "Test", "Test"));
+//        }
+//        else if (id == 2) {
+//            sepPage.add(new SepPage(2, "Test2", "Test2", "Test2", "Test2"));
+//            }
+//            return sepPage;
+//        }
 
 
     @GetMapping("/author")
